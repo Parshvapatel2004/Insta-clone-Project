@@ -34,12 +34,58 @@ async function userFollowController(req, res) {
   const followRecord = await followModel.create({
     follower: followerUsername,
     followee: followeeUsername,
+    status:"pending"
   });
   res.status(201).json({
     message: `You are now following ${followeeUsername}`,
     follow: followRecord,
   });
 }
+
+async function followStatusController(req, res) {
+  try {
+    const followerUsername = req.user.username; // logged in user
+    const followeeUsername = req.params.username;
+    const { status } = req.body;
+
+    if (!["accepted", "rejected"].includes(status)) {
+      return res.status(400).json({
+        message: "Status must be accepted or rejected",
+      });
+    }
+
+    // find follow request
+    const request = await followModel.findOne({
+      follower: followerUsername,
+      followee: followeeUsername,
+    });
+
+    if (!request) {
+      return res.status(404).json({
+        message: "Follow request not found",
+      });
+    }
+
+    if (request.status !== "pending") {
+      return res.status(400).json({
+        message: `Request already ${request.status}`,
+      });
+    }
+
+    request.status = status;
+    await request.save();
+
+    return res.status(200).json({
+      message: `Follow request ${status}`,
+      request,
+    });
+  } catch (error) {
+    return res.status(500).json({
+      message: error.message,
+    });
+  }
+}
+
 
 async function userUnfollowController(req, res) {
   const followerUsername = req.user.username;
@@ -63,4 +109,5 @@ async function userUnfollowController(req, res) {
 module.exports = {
   userFollowController,
   userUnfollowController,
+  followStatusController
 };

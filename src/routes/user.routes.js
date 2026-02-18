@@ -23,4 +23,14 @@ userRouter.post(
   userController.userUnfollowController,
 );
 
+
+
+// accept / reject follow request
+userRouter.patch(
+  "/followStatus/:username",
+  identifyUser,
+  userController.followStatusController
+);
+
+
 module.exports = userRouter;
