@@ -1,14 +1,16 @@
-import React from "react";
-import { RouterProvider } from "react-router";
+import { RouterProvider } from "react-router-dom";
 import { router } from "./App.routes";
-import './Features/Shared/global.scss'
+import "./Features/Shared/global.scss";
 import { AuthProvider } from "./Features/Auth/auth.context";
+import { FeedContextProvider } from "./Features/post/post.context";
 
 const App = () => {
   return (
     <div>
       <AuthProvider>
-        <RouterProvider router={router} />
+        <FeedContextProvider>
+          <RouterProvider router={router} />
+        </FeedContextProvider>
       </AuthProvider>
     </div>
   );

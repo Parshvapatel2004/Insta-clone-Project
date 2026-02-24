@@ -1,8 +1,13 @@
-import { createBrowserRouter } from "react-router";
+import { createBrowserRouter } from "react-router-dom";
 import Login from "./Features/Auth/pages/Login";
 import Register from "./Features/Auth/pages/Register";
+import Feed from "./Features/post/pages/Feed";
 
 export const router = createBrowserRouter([
+  {
+    path: "/",
+    element: <Feed />,
+  },
   {
     path: "/login",
     element: <Login />,
@@ -10,13 +15,5 @@ export const router = createBrowserRouter([
   {
     path: "/register",
     element: <Register />,
-  },
-  {
-    path: "/",
-    element: (
-      <main>
-        <h3>Welcome to app</h3>
-      </main>
-    ),
   },
 ]);
